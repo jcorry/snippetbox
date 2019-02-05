@@ -75,7 +75,5 @@ func newTemplateCache(dir string) (map[string]*template.Template, error) {
 		}
 		cache[name] = ts
 	}
-
-	fmt.Printf("%v", cache)
 	return cache, nil
 }
