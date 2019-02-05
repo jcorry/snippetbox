@@ -11,8 +11,9 @@ import (
 )
 
 type templateData struct {
-	Snippet  *models.Snippet
-	Snippets []*models.Snippet
+	Snippet     *models.Snippet
+	Snippets    []*models.Snippet
+	CurrentYear int
 }
 
 // Renders template data in template from cache
@@ -20,14 +21,14 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, name stri
 	// Get the template from cache
 	ts, ok := app.templateCache[name]
 	if !ok {
-		app.serverError(w, fmt.Errorf("The template %s does not exist.", name))
+		app.serverError(w, fmt.Errorf("the template %s does not exist", name))
 		return
 	}
 
 	buf := new(bytes.Buffer)
 
 	// execute the template
-	err := ts.Execute(buf, td)
+	err := ts.Execute(buf, app.addDefaultData(td, r))
 	if err != nil {
 		app.serverError(w, err)
 		return
