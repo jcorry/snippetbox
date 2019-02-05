@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/jcorry/snippetbox/pkg/models"
 )
@@ -14,6 +15,15 @@ type templateData struct {
 	Snippet     *models.Snippet
 	Snippets    []*models.Snippet
 	CurrentYear int
+}
+
+// Create a human readable representation of a date
+func humanDate(t time.Time) string {
+	return t.Format("Jan 02, 2006 3:04PM")
+}
+
+var functions = template.FuncMap{
+	"humanDate": humanDate,
 }
 
 // Renders template data in template from cache
@@ -49,7 +59,7 @@ func newTemplateCache(dir string) (map[string]*template.Template, error) {
 	for _, page := range pages {
 		name := filepath.Base(page)
 
-		ts, err := template.ParseFiles(page)
+		ts, err := template.New(name).Funcs(functions).ParseFiles(page)
 		if err != nil {
 			return nil, err
 		}
