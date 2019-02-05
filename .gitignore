@@ -13,3 +13,5 @@
 
 # data directory used by docker for MySQL
 data/
+.idea/
+.vscode/
