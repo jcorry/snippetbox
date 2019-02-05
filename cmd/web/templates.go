@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/jcorry/snippetbox/pkg/forms"
 	"github.com/jcorry/snippetbox/pkg/models"
 )
 
@@ -15,6 +16,7 @@ type templateData struct {
 	Snippet     *models.Snippet
 	Snippets    []*models.Snippet
 	CurrentYear int
+	Form        *forms.Form
 }
 
 // Create a human readable representation of a date
