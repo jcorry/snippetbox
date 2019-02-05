@@ -3,20 +3,23 @@ package main
 import (
 	"database/sql"
 	"flag"
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jcorry/snippetbox/pkg/models/mysql"
 )
 
 type application struct {
 	errorLog *log.Logger
 	infoLog  *log.Logger
+	snippets *mysql.SnippetModel
+	templateCache map[string]*template.Template
 }
 
 func main() {
-
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	dsn := flag.String("dsn", "snippetbox:ECqcJk6[NV6G*cnP@(127.0.0.1:33062)/snippetbox?parseTime=true", "MySQL DSN")
 	flag.Parse()
@@ -30,9 +33,16 @@ func main() {
 	}
 	defer db.Close()
 
+	templateCache, err := newTemplateCache("./ui/html/")
+	if err != nil {
+		errorLog.Fatal(err)
+	}
+
 	app := &application{
 		errorLog: errorLog,
 		infoLog:  infoLog,
+		snippets: &mysql.SnippetModel{DB: db},
+		templateCache: templateCache,
 	}
 
 	srv := &http.Server{
