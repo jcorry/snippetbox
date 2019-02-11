@@ -17,6 +17,7 @@ type templateData struct {
 	Snippets    []*models.Snippet
 	CurrentYear int
 	Form        *forms.Form
+	Flash       string
 }
 
 // Create a human readable representation of a date
