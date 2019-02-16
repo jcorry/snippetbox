@@ -9,6 +9,11 @@ import (
 	"github.com/jcorry/snippetbox/pkg/models"
 )
 
+// Ping
+func ping(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("OK"))
+}
+
 // Lists all snippets
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	s, err := app.snippets.Latest()
